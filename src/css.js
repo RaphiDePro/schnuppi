@@ -63,5 +63,20 @@ export const useStyles = makeStyles((theme) => ({
     },
     link: {
         textDecoration: "none"
+    },
+    item2: {
+        order: 2,
+        [theme.breakpoints.down('sm')]: {
+            order: 3
+        },
+        backgroundColor: 'rgba(0,0,0,0.06)',
+        textAlign: 'left'
+    },
+    item3: {
+        order: 3,
+        [theme.breakpoints.down('sm')]: {
+            order: 2
+        },
+        backgroundColor: 'rgba(0,0,0,0.1)'
     }
 }));

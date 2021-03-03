@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import {FilterList, Search} from "@material-ui/icons";
+import {CalendarToday, LocationOnOutlined, Schedule, Search} from "@material-ui/icons";
 import {Autocomplete} from "@material-ui/lab";
 import {filtersOptions, timeOptions, zeitraum} from "./data/initialValues";
 import {useStyles} from "./css";
@@ -40,10 +40,11 @@ function Events({events = []}) {
     })*/
 
     useEffect(() => {
-        setEventsToShow(events.filter(event => event.title.includes(search) || event.beruf.includes(search) || event.beschreibung.includes(search))
+        setEventsToShow(events.filter(event => event.titel.includes(search) || event.beruf.includes(search) || event.beschreibung.includes(search))
             .filter(event => filters.berufe.length === 0 || filters.berufe.includes(event.beruf))
             .filter(event => filters.regionen.length === 0 || filters.regionen.includes(event.region))
-            .filter(event => timeFilter.length === 0 || timeFilter.map(month => month.ind).includes(event.dateTimeFrom.getMonth() || event.dateTimeTo.getMonth())))
+            .filter(event => timeFilter.length === 0 || timeFilter.map(month => month.ind).includes(event.datumZeit_start.getMonth() || event.datumZeit_ende.getMonth()))
+            .sort((a, b) => a.datumZeit_start < b.datumZeit_start ? -1 : a.datumZeit_start > b.datumZeit_start ? 1 : 0))
     }, [events, timeFilter, filters, search])
 
     return (
@@ -148,13 +149,53 @@ function Events({events = []}) {
                     </Grid>
                 </Grid>
             </div>
-            <Button variant={"contained"} startIcon={<FilterList/>} className={"filterButton"} id={"filterButton"}>Filter</Button>
 
             <Paper className={classes.paper}>
                 <ul className={classes.ul}>
-                    {eventsToShow.length > 0 ? eventsToShow.map((event, index) =>
-                        <li key={`event${index}`} className={classes.li}>
-                            <Card className={classes.card}>
+                    {eventsToShow.length > 0 ? eventsToShow.map(event =>
+                        <li key={`event${event.id}`} className={classes.li}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={4} md={1} style={{backgroundColor: "#3f51b5"}}>
+                                    <Typography variant={"h4"} component={"h2"}>
+                                        {event.datumZeit_start.toLocaleDateString('de-De', {
+                                            month: 'short',
+                                            day: '2-digit'
+                                        })}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12} md={8} className={classes.item2}>
+                                    <Typography variant="h5" component="h2">
+                                        {event.titel}
+                                    </Typography>
+                                    <Typography variant="body2" component="p"
+                                                style={{whiteSpace: 'pre-line', textAlign: 'left'}}>
+                                        {event.beschreibung}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={8} md={3} className={classes.item3}>
+                                    <Typography variant="body2" component="p" style={{whiteSpace: 'pre-line'}}>
+                                        <LocationOnOutlined fontSize={"inherit"}/>
+                                        {event.adresse}<br/>
+
+                                        <CalendarToday fontSize={"inherit"}/>
+                                        {event.datumZeit_start.toLocaleDateString('de-DE')
+                                        + " bis " +
+                                        event.datumZeit_ende.toLocaleDateString('de-DE')
+                                        }<br/>
+
+                                        <Schedule fontSize={"inherit"}/>
+                                        {event.datumZeit_start.toLocaleTimeString('de-DE', timeOptions)
+                                        + " bis " +
+                                        event.datumZeit_ende.toLocaleTimeString('de-DE', timeOptions)
+                                        }
+                                    </Typography>
+                                    <Link to={`/events/${event.id}`} className={classes.link}>
+                                        <Button variant="contained" color="primary">Bewerben<br/>
+                                            {event.plaetze_frei} Plätze frei</Button>
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                            {/*<Card className={classes.card}>
                                 <CardContent>
                                     <Typography variant="h5" component="h2">
                                         {event.title}
@@ -176,10 +217,10 @@ function Events({events = []}) {
                                 <CardActions className={classes.center}>
                                     <Link to={`/events/${event.id}`} className={classes.link}>
                                         <Button variant="contained" color="primary">Bewerben<br/>###
-                                            Plätze frei</Button> {/*TODO anzeigen wie viele Plätze frei*/}
+                                            Plätze frei</Button>
                                     </Link>
                                 </CardActions>
-                            </Card>
+                            </Card>*/}
                         </li>
                     ) : <li>
                         <Card className={classes.card}>
