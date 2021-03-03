@@ -36,9 +36,10 @@ function App() {
         datumZeit_start: new Date("2021-03-17 13:30:00"),
         datumZeit_ende: new Date("2021-03-17 15:30:00"),
         beschreibung: "Informationsveranstaltung f&uuml;r Kaufmann/-frau EFZ Privatversicherung -\r\n\r\nAlle Inhalte werden auch am KV Schnuppertag besprochen.\r\n\r\nDie Informationsveranstaltung wird online via Microsoft Teams durchgef&uuml;hrt. Der Link zur Onlineveranstaltung wird in der Woche vor dem Anlass per Mail versendet.",
-        adresse: "online via Microsoft Teams",
+        adresse: "Microsoft Teams",
         plaetze_frei: 80,
-        bewerbung: 0
+        bewerbung: 0,
+        online: 1
     }])
 
     useEffect(() => {

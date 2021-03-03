@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import {CalendarToday, LocationOnOutlined, Schedule, Search} from "@material-ui/icons";
+import {CalendarToday, ComputerOutlined, LocationOnOutlined, Schedule, Search, WorkOutline} from "@material-ui/icons";
 import {Autocomplete} from "@material-ui/lab";
 import {filtersOptions, timeOptions, zeitraum} from "./data/initialValues";
 import {useStyles} from "./css";
@@ -174,7 +174,10 @@ function Events({events = []}) {
                                 </Grid>
                                 <Grid item xs={8} md={3} className={classes.item3}>
                                     <Typography variant="body2" component="p" style={{whiteSpace: 'pre-line'}}>
-                                        <LocationOnOutlined fontSize={"inherit"}/>
+                                        <WorkOutline fontSize={"inherit"}/>
+                                        {event.beruf}<br/>
+
+                                        {event.online ? <ComputerOutlined fontSize={"inherit"}/> :  <LocationOnOutlined fontSize={"inherit"}/>}
                                         {event.adresse}<br/>
 
                                         <CalendarToday fontSize={"inherit"}/>
