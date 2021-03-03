@@ -13,7 +13,7 @@ import {
     TextField,
     Typography
 } from "@material-ui/core";
-import {CalendarToday, ComputerOutlined, LocationOnOutlined, Schedule, Search, WorkOutline} from "@material-ui/icons";
+import {ComputerOutlined, Event, LocationOnOutlined, Schedule, Search, WorkOutline} from "@material-ui/icons";
 import {Autocomplete} from "@material-ui/lab";
 import {filtersOptions, timeOptions, zeitraum} from "./data/initialValues";
 import {useStyles} from "./css";
@@ -150,7 +150,7 @@ function Events({events = []}) {
                 </Grid>
             </div>
 
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={3}>
                 <ul className={classes.ul}>
                     {eventsToShow.length > 0 ? eventsToShow.map(event =>
                         <li key={`event${event.id}`} className={classes.li}>
@@ -173,25 +173,55 @@ function Events({events = []}) {
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={8} md={3} className={classes.item3}>
-                                    <Typography variant="body2" component="p" style={{whiteSpace: 'pre-line'}}>
-                                        <WorkOutline fontSize={"inherit"}/>
-                                        {event.beruf}<br/>
-
-                                        {event.online ? <ComputerOutlined fontSize={"inherit"}/> :  <LocationOnOutlined fontSize={"inherit"}/>}
-                                        {event.adresse}<br/>
-
-                                        <CalendarToday fontSize={"inherit"}/>
-                                        {event.datumZeit_start.toLocaleDateString('de-DE')
-                                        + " bis " +
-                                        event.datumZeit_ende.toLocaleDateString('de-DE')
-                                        }<br/>
-
-                                        <Schedule fontSize={"inherit"}/>
-                                        {event.datumZeit_start.toLocaleTimeString('de-DE', timeOptions)
-                                        + " bis " +
-                                        event.datumZeit_ende.toLocaleTimeString('de-DE', timeOptions)
-                                        }
-                                    </Typography>
+                                    <Grid container direction={"row"}>
+                                        <Grid item xs={2}>
+                                            <Typography component="p">
+                                                <WorkOutline fontSize={"inherit"}/>
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <Typography component="p" className={classes.textLeft}>
+                                                {event.beruf}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <Typography component="p">
+                                                {event.online ? <ComputerOutlined fontSize={"inherit"}/> :
+                                                    <LocationOnOutlined fontSize={"inherit"}/>}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <Typography component="p" className={classes.textLeft}>
+                                                {event.adresse}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <Typography component="p">
+                                                <Event fontSize={"inherit"}/>
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <Typography component="p" className={classes.textLeft}>
+                                                {event.datumZeit_start.toLocaleDateString('de-DE')
+                                                + " bis " +
+                                                event.datumZeit_ende.toLocaleDateString('de-DE')
+                                                }
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            <Typography component="p">
+                                                <Schedule fontSize={"inherit"}/>
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={10}>
+                                            <Typography component="p" className={classes.textLeft}>
+                                                {event.datumZeit_start.toLocaleTimeString('de-DE', timeOptions)
+                                                + " bis " +
+                                                event.datumZeit_ende.toLocaleTimeString('de-DE', timeOptions)
+                                                }
+                                            </Typography>
+                                        </Grid>
+                                    </Grid>
                                     <Link to={`/events/${event.id}`} className={classes.link}>
                                         <Button variant="contained" color="primary">Bewerben<br/>
                                             {event.plaetze_frei} Plätze frei</Button>

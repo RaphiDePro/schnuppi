@@ -40,6 +40,9 @@ export const useStyles = makeStyles((theme) => ({
     center: {
         justifyContent: "center",
     },
+    textLeft: {
+        textAlign: "left"
+    },
     paper: {
         padding: 20,
         justifyContent: "center",
