@@ -3,7 +3,8 @@
 /*screen width  |--------|--------|--------|--------|-------->*/
 /*range         |   xs   |   sm   |   md   |   lg   |   xl*/
 
-@media (min-width: 600px) {
+/*Das die Filter oben bleiben*/
+@media (min-height: 1024px), (min-width: 1024px) {
     .sticky {
         position: -webkit-sticky;
         position: sticky;
@@ -12,5 +13,159 @@
         z-index: 100;
         padding: 40px 20px 20px;
         background-color: #fafafa;
+    }
+}
+
+html {
+    overflow-y: scroll;
+}
+
+.searchField {
+    width: 60vw;
+}
+
+@media (min-width: 600px) {
+    .searchField {
+        width: 55vw;
+    }
+}
+
+@media (min-width: 960px) {
+    .searchField {
+        width: 45vw;
+    }
+}
+
+@media (min-width: 1280px) {
+    .searchField {
+        width: 35vw;
+    }
+}
+
+.nichtVorhanden {
+    color: dimgrey;
+    font-style: italic;
+}
+
+.ausgebucht {
+    color: indianred;
+    font-style: italic;
+}
+
+.month {
+    height: 15px;
+}
+
+.paper {
+    padding: 20px;
+    justify-content: center;
+}
+
+ul {
+    list-style-type: none;
+    padding-inline-start: 0;
+}
+
+li {
+    margin-bottom: 40px;
+}
+
+.link {
+    text-decoration: none;
+}
+
+.item2 {
+    order: 2;
+    background-color: rgba(0, 0, 0, 0.06);
+    text-align: left;
+}
+
+.item3 {
+    order: 3;
+    background-color: rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.mobileButton {
+    visibility: hidden;
+}
+
+@media (max-width: 960px) {
+    .item2 {
+        order: 3;
+    }
+
+    .item3 {
+        order: 2;
+    }
+
+    .desktopButton {
+        visibility: hidden;
+    }
+
+    .mobileButton {
+        visibility: visible;
+    }
+
+    button.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
+        margin-top: 20px;
+    }
+}
+
+/*
+ Event Grid
+*/
+.boxShadow {
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 5px 8px 0 rgba(0, 0, 0, 0.12);
+    -webkit-box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 5px 8px 0 rgba(0, 0, 0, 0.12);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/*Monats Grid*/
+.roundedCorners:first-of-type {
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+}
+
+/*Anmelden Grid*/
+.roundedCorners:last-of-type {
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5px;
+}
+
+@media (max-width: 960px) {
+    /*Details Grid*/
+    .roundedCorners:nth-of-type(2) {
+        border-radius: 0 0 5px 5px;
+        -webkit-border-radius: 0 0 5px 5px;
+        -moz-border-radius: 0 0 5px 5px;
+    }
+}
+
+/*Das die Ecken am richtigen ort abgerundet werden*/
+@media (min-width: 960px) {
+    /*Monats Grid*/
+    .roundedCorners:first-of-type {
+        border-bottom-left-radius: 5px;
+        -webkit-border-bottom-left-radius: 5px;
+        -moz-border-radius-bottomleft: 5px;
+    }
+
+    /*Anmelden Grid*/
+    .roundedCorners:last-of-type {
+        border-bottom-right-radius: 5px;
+        -webkit-border-bottom-right-radius: 5px;
+        -moz-border-radius-bottomright: 5px;
+    }
+}
+
+/*Damit der Monat nicht aus dem Feld kommt*/
+@media (min-width: 960px) and (max-width: 1280px) {
+    h2.MuiTypography-root.MuiTypography-h4 {
+        font-size: 1.5rem;
     }
 }

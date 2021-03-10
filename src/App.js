@@ -1,17 +1,12 @@
 import React, {useEffect, useState} from "react";
 import Logo from './images/logo_schnupperlehr.png';
-import {Container, createMuiTheme, CssBaseline, useMediaQuery} from "@material-ui/core";
-import {Route, Switch} from 'react-router-dom';
+import {Button, Container, createMuiTheme, CssBaseline, useMediaQuery} from "@material-ui/core";
+import {Route, Switch, useHistory} from 'react-router-dom';
 import {ThemeProvider} from "@material-ui/core/styles";
-import {useStyles} from "./css";
 import Events from "./Events";
-import Infos from "./Infos";
 import Event from "./Event";
-
-// value         |0px     600px    960px    1280px   1920px
-// key           |xs      sm       md       lg       xl
-// screen width  |--------|--------|--------|--------|-------->
-// range         |   xs   |   sm   |   md   |   lg   |   xl
+import "./App.css"
+import {standardBerufe, standardRegionen} from "./data/initialValues";
 
 function App() {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -20,35 +15,82 @@ function App() {
         () =>
             createMuiTheme({
                 palette: {
+                    background: {
+                        paper: "#fafafa"
+                    },
                     type: prefersDarkMode ? 'light' : 'light',
                     //                      'dark'
                 },
+                overrides: {
+                    MuiTooltip: {
+                        tooltip: {
+                            fontSize: "1em",
+                        }
+                    }
+                }
             }),
         [prefersDarkMode],
     );
 
-    const classes = useStyles();
-    const [events, setEvents] = useState([{
-        id: 112,
-        beruf: "Kaufmann / Kauffrau",
-        region: "Winterthur",
-        titel: "KV Informationsnachmittag virtuell",
-        datumZeit_start: new Date("2021-03-17 13:30:00"),
-        datumZeit_ende: new Date("2021-03-17 15:30:00"),
-        beschreibung: "Informationsveranstaltung f&uuml;r Kaufmann/-frau EFZ Privatversicherung -\r\n\r\nAlle Inhalte werden auch am KV Schnuppertag besprochen.\r\n\r\nDie Informationsveranstaltung wird online via Microsoft Teams durchgef&uuml;hrt. Der Link zur Onlineveranstaltung wird in der Woche vor dem Anlass per Mail versendet.",
-        adresse: "Microsoft Teams",
-        plaetze_frei: 80,
-        bewerbung: 0,
-        online: 1
-    }])
+    const [combinations, setCombinations] = useState([])
+    const [berufe, setBerufe] = useState(standardBerufe)
+    const [regionen, setRegionen] = useState(standardRegionen)
+    const [events, setEvents] = useState([
+        {
+            id: 112,
+            beruf: "Kaufmann / Kauffrau",
+            region: "Winterthur",
+            titel: "KV Informationsnachmittag virtuell",
+            datumZeit_start: new Date("2021-03-17 13:30:00"),
+            datumZeit_ende: new Date("2021-03-17 15:30:00"),
+            beschreibung: "Informationsveranstaltung f&uuml;r Kaufmann/-frau EFZ Privatversicherung -\r\n\r\nAlle Inhalte werden auch am KV Schnuppertag besprochen.\r\n\r\nDie Informationsveranstaltung wird online via Microsoft Teams durchgef&uuml;hrt. Der Link zur Onlineveranstaltung wird in der Woche vor dem Anlass per Mail versendet.",
+            adresse: "Microsoft Teams",
+            plaetze_frei: 80,
+            bewerbung: 0,
+            begleitung: 1,
+            online: 1
+        },
+        {
+            id: 113,
+            beruf: "Kaufmann / Kauffrau",
+            region: "Winterthur",
+            titel: "KV Informationsnachmittag virtuell",
+            datumZeit_start: new Date("2021-03-17 13:30:00"),
+            datumZeit_ende: new Date("2021-03-17 15:30:00"),
+            beschreibung: "Informationsveranstaltung f&uuml;r Kaufmann/-frau EFZ Privatversicherung -\r\n\r\nAlle Inhalte werden auch am KV Schnuppertag besprochen.\r\n\r\nDie Informationsveranstaltung wird online via Microsoft Teams durchgef&uuml;hrt. Der Link zur Onlineveranstaltung wird in der Woche vor dem Anlass per Mail versendet.",
+            adresse: "Microsoft Teams",
+            plaetze_frei: 80,
+            bewerbung: 1,
+            begleitung: 0,
+            online: 1
+        },])
 
     useEffect(() => {
         const reqOptions = {
             method: 'GET'
         }
-        fetch('http://localhost/schnuppi/new/api/events.php', reqOptions)
+        fetch('https://co2.it-lehre.ch/events.php', reqOptions)
             .then(res => res.json())
-            .then(res => setEvents(res))
+            .then(res => {
+                // In Javascript Datum umwandeln
+                res.forEach(event => {
+                    event["datumZeit_start"] = new Date(event.datumZeit_start)
+                    event["datumZeit_ende"] = new Date(event.datumZeit_ende)
+                })
+                setEvents(res)
+            })
+            .catch(reason => console.log(reason))
+        fetch('https://co2.it-lehre.ch/berufe.php', reqOptions)
+            .then(res => res.json())
+            .then(res => setBerufe(res))
+            .catch(reason => console.log(reason))
+        fetch('https://co2.it-lehre.ch/regionen.php', reqOptions)
+            .then(res => res.json())
+            .then(res => setRegionen(res))
+            .catch(reason => console.log(reason))
+        fetch('https://co2.it-lehre.ch/combinations.php', reqOptions)
+            .then(res => res.json())
+            .then(res => setCombinations(res))
             .catch(reason => console.log(reason))
 
         /*const reqOptions = {
@@ -66,18 +108,15 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Container className={classes.app}>
+            <Container className={"app"}>
                 <CssBaseline/>
-                <img src={Logo} alt="Logo" className={classes.logo}/>
+                <img src={Logo} alt="Logo" className={"logo"}/>
 
                 <Switch>
                     <Route exact path={'/'}>
-                        <Events events={events}/>
+                        <Events events={events} berufe={berufe} regionen={regionen} combinations={combinations}/>
                     </Route>
-                    <Route exact path={'/infos'}>
-                        <Infos/>
-                    </Route>
-                    <Route exact path={'/events/:id'} component={props => <Event {...props} events={events}/>}>
+                    <Route exact path={'/:id'} component={props => <Event {...props} events={events}/>}>
                     </Route>
                     <Route component={NoMatch}/>
                 </Switch>
@@ -89,11 +128,12 @@ function App() {
 
 
 function NoMatch() {
+    const history = useHistory();
     return (
         <>
             <h1 className="display-1">404</h1>
             <h2 className="display-1">Wir konnten diese Seite leider nicht finden</h2>
-            <a href={'/'}>zurück zur Startseite</a>
+            <Button variant={"contained"} color={"primary"} onClick={() => history.goBack()}>zurück</Button>
         </>
     )
 }
