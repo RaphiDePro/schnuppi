@@ -61,12 +61,12 @@ html {
     justify-content: center;
 }
 
-ul {
+.ul {
     list-style-type: none;
     padding-inline-start: 0;
 }
 
-li {
+.li {
     margin-bottom: 40px;
 }
 

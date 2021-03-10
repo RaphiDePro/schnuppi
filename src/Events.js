@@ -35,6 +35,7 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
     const [eventsToShow, setEventsToShow] = useState(events);
 
     useEffect(() => {
+        //Alle Anlässe filtern nach den aktiven Filter und Sucheingabe. Sortieren nach Datum
         setEventsToShow(events.filter(event => event.plaetze_frei > 0)
             .filter(event =>
                 event.titel.toLowerCase().includes(search.toLowerCase()) ||
@@ -78,6 +79,7 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                     }/>
 
                 <Grid direction={"row"} container spacing={3} justify={"center"}>
+                    {/*Um Code zu sparen wird über ein Array gemapped*/}
                     {filtersOptions.map((filter, index) =>
                         <Grid key={`grid-${index}`} item xs={11} sm={6} md={4}>
                             <Autocomplete
@@ -100,11 +102,14 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                             color={"primary"}
                                             checked={selected}
                                         />
+                                        {/*Option ausgrauen und schräg schreiben, wenn es den gewählten Beruf in der Region nicht gibt und umgekehrt*/}
                                         {filters[filter.other].length === 0 ? option : !combinations
                                             .filter(combination => filters[filter.other].includes(combination[filter.otherShort]))
                                             .map(combination => combination[filter.short])
                                             .includes(option) ?
                                             <p className={"nichtVorhanden"}>{option}</p> : option}
+
+                                        {/*Wenn es keine Anlässe gibt, ausgebucht schreiben*/}
                                         {!events.map(event => event[filter.short]).includes(option) &&
                                         <p className={"ausgebucht"}>(ausgebucht)</p>}
                                     </React.Fragment>
@@ -138,12 +143,15 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                             noOptionsText={"Kein Filter gefunden"}
                             getOptionLabel={option => option.label}
                             getOptionDisabled={option => !(
-                                events.map(event => event.datumZeit_start.getMonth()).includes(option.ind) ||
-                                events.map(event => event.datumZeit_ende.getMonth()).includes(option.ind)
+                                //Nur mögliche Monate auswählbar machen
+                                eventsToShow.map(event => event.datumZeit_start.getMonth()).includes(option.ind) ||
+                                eventsToShow.map(event => event.datumZeit_ende.getMonth()).includes(option.ind)
                             )}
                             renderOption={option => <p className={"month"}>{option.label}</p>}
                             groupBy={option => option.row}
                             renderGroup={params =>
+                                //Es gibt 4 Gruppen mit jeweils 3 Monaten
+                                //Hier wird ein Grid erstellt, dass immer die 3 Monate nebeneinander sind
                                 <Grid container direction={"row"} justify={"center"}
                                       key={`grid-month-row-${params.group}`}>
                                     {params.children.map((children, index) =>
@@ -163,11 +171,12 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
             </div>
 
             <Paper className={"paper"} elevation={-1}>
-                <ul>
+                <ul className={"ul"}>
                     {eventsToShow.length > 0 ? eventsToShow.map(event =>
-                        <li key={`event${event.id}`}>
+                        <li key={`event${event.id}`} className={"li"}>
                             <Grid container spacing={3} className={"boxShadow"}>
-                                <Grid item xs={4} md={1} className={classes.bigDateGrid + " roundedCorners"}> {/*Monats Grid*/}
+                                <Grid item xs={4} md={1}
+                                      className={classes.bigDateGrid + " roundedCorners"}> {/*Monats Grid*/}
                                     <Typography variant={"h4"} component={"h2"}>
                                         {event.datumZeit_start.toLocaleDateString('de-De', {
                                             month: 'short',
@@ -190,6 +199,7 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                     </Link>
                                 </Grid>
                                 <Grid item xs={8} md={3} className={"item3 roundedCorners"}> {/*Anmelden Grid*/}
+                                    {/*Grid, damit die icons / informationen gut angeordnet sind*/}
                                     <Grid container direction={"row"}>
                                         <Grid item xs={2}>
                                             <Typography component="p">
@@ -203,6 +213,7 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                         </Grid>
                                         <Grid item xs={2}>
                                             <Typography component="p">
+                                                {/*anderes Icon wenn es online ist*/}
                                                 {event.online ? <ComputerOutlined fontSize={"inherit"}/> :
                                                     <LocationOnOutlined fontSize={"inherit"}/>}
                                             </Typography>
@@ -219,6 +230,7 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                         </Grid>
                                         <Grid item xs={10}>
                                             <Typography component="p" style={{textAlign: 'left'}}>
+                                                {/*Wenn start- und enddatum dasselbe ist, nur startdatum anzeigen*/}
                                                 {event.datumZeit_start.toLocaleDateString('de-DE') === event.datumZeit_ende.toLocaleDateString('de-DE') ?
                                                     event.datumZeit_start.toLocaleDateString('de-DE') :
                                                     event.datumZeit_start.toLocaleDateString('de-DE')
@@ -241,7 +253,7 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    <Link to={`/${event.id}`} className={"link desktopButton"}>
+                                    <Link to={`/${event.id}`} className={"link desktopButton"} tabIndex={-1}>
                                         <Button variant="contained"
                                                 color="primary">{event.bewerbung ? "Bewerben" : "Anmelden"}<br/>
                                             {event.plaetze_frei} Plätze frei</Button>

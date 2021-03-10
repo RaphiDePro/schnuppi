@@ -66,6 +66,7 @@ function App() {
         },])
 
     useEffect(() => {
+        //Alle Daten von API fetchen
         const reqOptions = {
             method: 'GET'
         }
@@ -126,7 +127,7 @@ function App() {
     );
 }
 
-
+//404 Page
 function NoMatch() {
     const history = useHistory();
     return (

@@ -1,9 +1,10 @@
 import {useState} from "react";
 
+//hook um daten in den Session Storage zu speichern
 export default function useSessionStorage(key, initialValue) {
     const [storedValue, setStoredValue] = useState(() => {
         try {
-            const item = window.sessionStorage.getItem(key)//gay
+            const item = window.sessionStorage.getItem(key)
             return item ? JSON.parse(item) : initialValue
         } catch (error) {
             console.log(error)

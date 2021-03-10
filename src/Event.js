@@ -46,6 +46,7 @@ export default function Event({events, match}) {
     const [notenfilter, setNotenfilter] = useState([])
 
     useEffect(() => {
+        //Notenfilter von der API holen
         fetch(`https://co2.it-lehre.ch/events.php?id=${match.params.id}`)
             .then(res => res.json())
             .then(res => setNotenfilter(res))
@@ -60,10 +61,20 @@ export default function Event({events, match}) {
     }
 
     function handleFileChange(e) {
-        setFiles({
-            ...files,
-            [e.target.name]: e.target.files[0]
-        })
+        //Checken ob Filetyp erlaubt ist
+        let allowed = ["pdf", "docx", "jpg", "jpeg", "png", "tif"];
+
+        let filename = e.target.value.toLowerCase();
+        let filename_arr = filename.split(".");
+
+        if (filename !== "" && allowed.indexOf(filename_arr[filename_arr.length - 1]) < 0) {
+            alert("Dieser Dateityp ist nicht erlaubt!\n\nGeeignete Dateitypen: ." + allowed.join(", ."));
+        } else {
+            setFiles({
+                ...files,
+                [e.target.name]: e.target.files[0]
+            })
+        }
     }
 
     const event = events.find(event => event.id === parseInt(match.params.id));
@@ -79,7 +90,7 @@ export default function Event({events, match}) {
 
     return <>
         <br/>
-        <Link to={'/'} className={"link"}>
+        <Link to={'/'} className={"link"} tabIndex={-1}>
             <Button variant={"contained"} color={"primary"}>zurück zur Auswahl</Button>
         </Link>
         <Typography variant="h5" component="h2">
@@ -180,8 +191,10 @@ export default function Event({events, match}) {
                         Bitte gib hier die Zeugnisnoten des letzten Semesters ein. Deine Bewerbung kann nur angenommen
                         werden, wenn sie den Mindestanforderungen des Berufs entspricht.
                     </Typography>
+                    {/*Alle Notenfilter durchgehen*/}
                     {notenfilter.map((filter, index) =>
                         <div className={"zeugnisnoten"} key={index}>
+                            {/*Mindestanforderungen*/}
                             <Tooltip arrow
                                      placement={"right"}
                                      enterTouchDelay={1}
@@ -190,6 +203,7 @@ export default function Event({events, match}) {
                                      title={`Mindestnote: ${filter.note}, Niveau: ${niveaus.find(niveau => niveau.value = filter.stufe).label}`}>
                                 <InfoOutlined tabIndex={0} fontSize={"small"} className={"info"}/>
                             </Tooltip>
+                            {/*Inputs für Note und Niveau*/}
                             <TextField label={filter.fach} disabled className={"fach"}/>
                             <FormControl required className={"select"}>
                                 <InputLabel id="note-label">Note</InputLabel>
@@ -227,7 +241,7 @@ export default function Event({events, match}) {
                         Bitte lade hier dein Zeugnis der letzten zwei Semester hoch (Vorder- und Rückseite.)
                     </Typography>
                     {["file1", "file2", "file3", "file4"].map(file =>
-                        <div>
+                        <div key={file}>
                             <input type="file" id={file} name={file}
                                    accept="application/pdf, .docx, image/tiff, image/png, image/jpeg"
                                    hidden
