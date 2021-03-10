@@ -183,8 +183,8 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                                 style={{whiteSpace: 'pre-line', textAlign: 'left'}}>
                                         {event.beschreibung}
                                     </Typography>
-                                    <Link to={`/${event.id}`} className={"link"}>
-                                        <Button variant="contained" fullWidth className={"mobileButton"}
+                                    <Link to={`/${event.id}`} className={"link mobileButton"}>
+                                        <Button variant="contained" fullWidth
                                                 color="primary">{event.bewerbung ? "Bewerben " : "Anmelden "}
                                             {event.plaetze_frei} Plätze frei</Button>
                                     </Link>
@@ -241,8 +241,8 @@ function Events({events = [], berufe = [], regionen = [], combinations = []}) {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    <Link to={`/${event.id}`} className={"link"}>
-                                        <Button variant="contained" className={"desktopButton"}
+                                    <Link to={`/${event.id}`} className={"link desktopButton"}>
+                                        <Button variant="contained"
                                                 color="primary">{event.bewerbung ? "Bewerben" : "Anmelden"}<br/>
                                             {event.plaetze_frei} Plätze frei</Button>
                                     </Link>

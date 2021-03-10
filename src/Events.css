@@ -87,7 +87,7 @@ li {
 }
 
 .mobileButton {
-    visibility: hidden;
+    display: none;
 }
 
 @media (max-width: 960px) {
@@ -100,11 +100,11 @@ li {
     }
 
     .desktopButton {
-        visibility: hidden;
+        display: none;
     }
 
     .mobileButton {
-        visibility: visible;
+        display: block;
     }
 
     button.MuiButtonBase-root.MuiButton-root.MuiButton-contained {
