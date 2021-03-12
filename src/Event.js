@@ -61,7 +61,7 @@ export default function Event({events, match}) {
     }
 
     function handleFileChange(e) {
-        //Checken ob Filetyp erlaubt ist
+        //Checken ob Filetyp erlaubt ist (Nur accept beim Input reicht nicht)
         let allowed = ["pdf", "docx", "jpg", "jpeg", "png", "tif"];
 
         let filename = e.target.value.toLowerCase();
@@ -77,6 +77,7 @@ export default function Event({events, match}) {
         }
     }
 
+    //Event mit der id aus dem Link holen
     const event = events.find(event => event.id === parseInt(match.params.id));
     if (!event) {
         return <>
@@ -165,6 +166,7 @@ export default function Event({events, match}) {
             <InputMask mask="+41(0) 99 999 99 99"
                        value={values.telefon}
                        onChange={handleChange}>
+                {/*TextField mitgeben, dass es gleich aussieht wie die anderen Inputs (InputMask ist eine externe Library)*/}
                 {() => <TextField className={"input"}
                                   required
                                   label={"Telefon"}
@@ -242,6 +244,7 @@ export default function Event({events, match}) {
                     </Typography>
                     {["file1", "file2", "file3", "file4"].map(file =>
                         <div key={file}>
+                            {/*input type file ist hidden damit man den Button von Material ui verwenden kannn*/}
                             <input type="file" id={file} name={file}
                                    accept="application/pdf, .docx, image/tiff, image/png, image/jpeg"
                                    hidden

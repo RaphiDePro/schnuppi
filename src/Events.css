@@ -12,10 +12,10 @@
         max-height: 100vh;
         z-index: 100;
         padding: 40px 20px 20px;
-        background-color: #fafafa;
     }
 }
 
+/*Damit die scrollbar immer da ist, sonst verschiebt sich immer alles*/
 html {
     overflow-y: scroll;
 }
